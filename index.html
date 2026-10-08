@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f6fc" />
+    <title>TaskFlow — Your productivity space</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" data-view-link="dashboard" aria-label="TaskFlow dashboard">
+        <span class="brand-mark" aria-hidden="true">✓</span>
+        <span>Task<span>Flow</span></span>
+      </a>
+      <button id="menuToggle" class="icon-btn menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mainNav">☰</button>
+      <nav id="mainNav" class="main-nav" aria-label="Main navigation">
+        <button class="nav-link active" type="button" data-view-link="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-link" type="button" data-view-link="tasks"><span>▤</span> My Tasks</button>
+        <button class="nav-link" type="button" data-view-link="completed"><span>✓</span> Completed</button>
+        <button class="nav-link" type="button" data-view-link="settings"><span>⚙</span> Settings</button>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark theme"><span aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button>
+      </nav>
+      <button id="mobileThemeToggle" class="icon-btn mobile-theme-toggle" type="button" aria-label="Switch theme">☾</button>
+    </header>
+    <div id="navBackdrop" class="nav-backdrop" hidden></div>
+
+    <main class="app-shell">
+      <section id="dashboardView" class="view active-view" aria-labelledby="greeting">
+        <div class="welcome-row">
+          <div>
+            <p class="eyebrow" id="todayDate"></p>
+            <h1 id="greeting"><span id="greetingTime">Good morning!</span><span id="greetingName"></span> <span id="greetingEmoji" aria-hidden="true">☀️</span></h1>
+            <p class="welcome-copy">Stay organized and make today count.</p>
+          </div>
+          <button class="primary-btn add-task-trigger" type="button">＋ Add New Task</button>
+        </div>
+
+        <section class="stats-grid" aria-label="Task statistics">
+          <article class="stat-card stat-total"><div class="stat-icon">▤</div><p>Total tasks</p><strong id="totalCount">0</strong><span>Everything on your list</span></article>
+          <article class="stat-card stat-active"><div class="stat-icon">◷</div><p>Active</p><strong id="activeCount">0</strong><span>Ready for your focus</span></article>
+          <article class="stat-card stat-complete"><div class="stat-icon">✓</div><p>Completed</p><strong id="completedCount">0</strong><span>Look what you’ve done</span></article>
+          <article class="stat-card stat-overdue"><div class="stat-icon">!</div><p>Overdue</p><strong id="overdueCount">0</strong><span>Tasks needing attention</span></article>
+        </section>
+
+        <section class="progress-card card">
+          <div class="progress-heading"><div><p class="eyebrow">YOUR MOMENTUM</p><h2>Today's progress</h2></div><strong id="progressPercent">0%</strong></div>
+          <div class="progress-track" role="progressbar" aria-label="Today's task completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progressBar"></span></div>
+          <p id="progressSummary" class="muted"></p>
+        </section>
+
+        <section class="task-section card">
+          <div class="section-heading">
+            <div><p class="eyebrow">YOUR WORKSPACE</p><h2 id="taskSectionTitle">Today's tasks</h2></div>
+            <button class="text-btn" type="button" data-view-link="tasks">View all tasks <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="toolbar">
+            <div class="filter-group" role="group" aria-label="Filter tasks">
+              <button class="filter-btn active" data-filter="all" type="button">All</button>
+              <button class="filter-btn" data-filter="active" type="button">Active</button>
+              <button class="filter-btn" data-filter="completed" type="button">Completed</button>
+              <button class="filter-btn" data-filter="overdue" type="button">Overdue</button>
+            </div>
+            <div class="control-row">
+              <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search tasks..." aria-label="Search tasks" /></label>
+              <label class="select-wrap"><span class="sr-only">Filter by priority</span><select id="priorityFilter"><option value="all">All priority</option><option value="high">High priority</option><option value="medium">Medium priority</option><option value="low">Low priority</option></select></label>
+              <label class="select-wrap"><span class="sr-only">Sort tasks</span><select id="sortSelect"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="due">Due date</option><option value="priority">Priority</option><option value="completed">Completed</option></select></label>
+            </div>
+          </div>
+          <div id="taskList" class="task-list" aria-live="polite"></div>
+          <div class="list-footer"><span class="muted"><strong id="visibleCount">0</strong> tasks shown</span><button id="clearCompletedBtn" class="text-btn danger-text" type="button">Clear completed</button></div>
+        </section>
+      </section>
+
+      <section id="tasksView" class="view" aria-labelledby="tasksHeading">
+        <div class="page-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h1 id="tasksHeading">My tasks</h1><p class="welcome-copy">Keep your priorities moving forward.</p></div><button class="primary-btn add-task-trigger" type="button">＋ Add New Task</button></div>
+        <section class="task-section card">
+          <div class="section-heading"><div><h2>All tasks</h2></div></div>
+          <div class="toolbar">
+            <div class="filter-group" role="group" aria-label="Filter tasks">
+              <button class="filter-btn active" data-filter="all" type="button">All</button><button class="filter-btn" data-filter="active" type="button">Active</button><button class="filter-btn" data-filter="completed" type="button">Completed</button><button class="filter-btn" data-filter="overdue" type="button">Overdue</button>
+            </div>
+            <div class="control-row"><label class="search-box"><span aria-hidden="true">⌕</span><input class="shared-search" type="search" placeholder="Search tasks..." aria-label="Search tasks" /></label><label class="select-wrap"><span class="sr-only">Filter by priority</span><select class="shared-priority"><option value="all">All priority</option><option value="high">High priority</option><option value="medium">Medium priority</option><option value="low">Low priority</option></select></label><label class="select-wrap"><span class="sr-only">Sort tasks</span><select class="shared-sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="due">Due date</option><option value="priority">Priority</option><option value="completed">Completed</option></select></label></div>
+          </div>
+          <div id="allTaskList" class="task-list" aria-live="polite"></div>
+          <div class="list-footer"><span class="muted"><strong id="allVisibleCount">0</strong> tasks shown</span><button class="text-btn danger-text clear-completed-trigger" type="button">Clear completed</button></div>
+        </section>
+      </section>
+
+      <section id="completedView" class="view" aria-labelledby="completedHeading">
+        <div class="page-heading"><div><p class="eyebrow">YOUR WINS</p><h1 id="completedHeading">Completed tasks</h1><p class="welcome-copy">A little progress adds up to big things.</p></div></div>
+        <section class="task-section card"><div id="completedTaskList" class="task-list" aria-live="polite"></div></section>
+      </section>
+
+      <section id="settingsView" class="view" aria-labelledby="settingsHeading">
+        <div class="page-heading"><div><p class="eyebrow">MAKE IT YOURS</p><h1 id="settingsHeading">Settings</h1><p class="welcome-copy">A few preferences to make TaskFlow feel right.</p></div></div>
+        <section class="settings-card card">
+          <p class="eyebrow">APPEARANCE</p><h2>Theme</h2><p class="muted">Choose the look that works best for you.</p>
+          <div class="theme-options"><button class="theme-option" type="button" data-set-theme="light">☀️ <span>Light</span></button><button class="theme-option" type="button" data-set-theme="dark">🌙 <span>Dark</span></button></div>
+          <div class="settings-divider"></div><p class="eyebrow">PERSONALIZE</p>
+          <label class="setting-name-label" for="userNameInput">Your name</label>
+          <input id="userNameInput" class="setting-name-input" type="text" maxlength="40" autocomplete="given-name" placeholder="Enter your name" />
+          <p class="setting-name-help muted">Your name will appear in the dashboard greeting.</p>
+          <div class="settings-divider"></div><p class="eyebrow">TASK PREFERENCES</p>
+          <label class="setting-row"><span><strong>Show completed tasks</strong><small>Keep finished tasks visible in your dashboard and task list.</small></span><input id="showCompletedToggle" class="switch" type="checkbox" checked /></label>
+          <label class="setting-row"><span><strong>Notifications</strong><small>Show a quick confirmation when you update a task.</small></span><input id="notificationsToggle" class="switch" type="checkbox" checked /></label>
+        </section>
+      </section>
+    </main>
+
+    <div id="taskModal" class="modal hidden" aria-hidden="true">
+      <section class="modal-content card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-heading"><div><p class="eyebrow">TASK DETAILS</p><h2 id="modalTitle">Add a new task</h2></div><button id="closeModalBtn" class="icon-btn close-modal" type="button" aria-label="Close dialog">×</button></div>
+        <label for="taskInput">Task title</label><input id="taskInput" type="text" maxlength="160" placeholder="What needs to be done?" />
+        <p id="taskError" class="error-message" aria-live="polite"></p>
+        <label for="taskDescription">Description <span class="optional">(optional)</span></label><textarea id="taskDescription" rows="3" maxlength="500" placeholder="Add a few details..."></textarea>
+        <div class="form-columns"><div><label for="taskDate">Date <span class="optional">(optional)</span></label><input id="taskDate" type="date" /></div><div><label for="taskTime">Time <span class="optional">(optional)</span></label><input id="taskTime" type="time" /></div></div>
+        <label for="taskPriority">Priority</label><select id="taskPriority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
+        <div class="modal-actions"><button id="cancelTaskBtn" class="ghost-btn" type="button">Cancel</button><button id="saveTaskBtn" class="primary-btn" type="button">Add task</button></div>
+      </section>
+    </div>
+    <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
